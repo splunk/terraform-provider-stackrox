@@ -1,0 +1,12 @@
+s/Dtr StorageDtrConfig/Dtr *StorageDtrConfig/
+s/Clairify StorageClairifyConfig/Clairify *StorageClairifyConfig/
+s/Docker StorageDockerConfig/Docker *StorageDockerConfig/
+s/Docker StorageDockerConfig/Docker *StorageDockerConfig/
+s/Quay StorageQuayConfig/Quay *StorageQuayConfig/
+s/Ecr StorageEcrConfig/Ecr *StorageEcrConfig/
+s/Tenable StorageTenableConfig/Tenable *StorageTenableConfig/
+s/Google StorageGoogleConfig/Google *StorageGoogleConfig/
+s/Clair StorageClairConfig/Clair *StorageClairConfig/
+s/Anchore StorageAnchoreConfig/Anchore *StorageAnchoreConfig/
+s/Scannerv2 StorageScannerV2Config/Scannerv2 *StorageScannerV2Config/
+s/Ibm StorageIbmRegistryConfig/Ibm *StorageIbmRegistryConfig/
