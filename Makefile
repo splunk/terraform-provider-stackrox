@@ -18,12 +18,6 @@ SWAGGER_PATCH_JQ_FILTER := '.paths["/v1/networkpolicies/cluster/{clusterId}"].ge
 SWAGGER_PATCHED_FILE := swagger-patched.json
 GENERATED_STACKROX_API_CLIENT_PACKAGE := internal/provider/stackrox
 
-ifdef CI_JOB_ID
-VOLUME_FLAGS := --volumes-from `docker ps -q`
-else
-VOLUME_FLAGS := -v $(CURDIR):/builds/kub/stackrox
-endif
-
 .PHONY: all
 all: provider test
 
@@ -53,10 +47,11 @@ swagger:
 	@echo "+ $@"
 	jq $(SWAGGER_PATCH_JQ_FILTER) swagger.json >$(SWAGGER_PATCHED_FILE)
 	$(RM) -r $(GENERATED_STACKROX_API_CLIENT_PACKAGE)
-	docker run --rm $(VOLUME_FLAGS) openapitools/openapi-generator-cli:v4.2.0 generate \
-		-i /builds/kub/stackrox/$(SWAGGER_PATCHED_FILE) \
+	# Expecting openapi-generator-cli 4.2.0
+	java -jar openapi-generator-cli.jar generate \
+		-i $(SWAGGER_PATCHED_FILE) \
 		-g go \
-		-o /builds/kub/stackrox/$(GENERATED_STACKROX_API_CLIENT_PACKAGE) \
+		-o $(GENERATED_STACKROX_API_CLIENT_PACKAGE) \
 		--additional-properties packageName=stackrox,withGoCodegenComment=true,enumClassPrefix=true
 	$(RM) $(GENERATED_STACKROX_API_CLIENT_PACKAGE)/go.mod
 	$(RM) $(GENERATED_STACKROX_API_CLIENT_PACKAGE)/go.sum

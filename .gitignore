@@ -78,6 +78,7 @@ terraform.rc
 ######################################################################
 
 .DS_Store
+.vscode
 
 # Temp files
 swagger-patched.json
@@ -87,3 +88,6 @@ terraform-provider-stackrox
 
 # Generated code
 internal/provider/stackrox
+
+# OpenAPI Generator
+openapi-generator-cli.jar
