@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: 1.17
+      - run: wget --no-verbose https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.2.0/openapi-generator-cli-4.2.0.jar -O openapi-generator-cli.jar
+      - run: make generate
       - name: Import GPG key
         id: import_gpg
         uses: hashicorp/ghaction-import-gpg@v2.1.0
