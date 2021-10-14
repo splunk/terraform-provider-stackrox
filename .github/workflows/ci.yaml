@@ -1,0 +1,46 @@
+name: build
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+jobs:
+  build-linux:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+      - uses: actions/cache@v2
+        with:
+          # In order:
+          # * Module download cache
+          # * Build cache (Linux)
+          # * Build cache (Mac)
+          # * Build cache (Windows)
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/Library/Caches/go-build
+            %LocalAppData%\go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+        id: cache
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "16"
+      - run: wget --no-verbose https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/4.2.0/openapi-generator-cli-4.2.0.jar -O openapi-generator-cli.jar
+      - run: make generate
+      # - name: Test
+      #   run: go test ./...
+      - name: goreleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          args: release --snapshot --skip-publish --rm-dist --skip-sign
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
